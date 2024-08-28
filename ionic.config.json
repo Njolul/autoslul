@@ -1,0 +1,7 @@
+{
+  "name": "autoslul",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
