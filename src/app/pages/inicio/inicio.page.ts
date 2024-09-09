@@ -12,7 +12,7 @@ export class InicioPage implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit() {
-    // Asegúrate de que el estado de navegación tiene el tipo correcto
+    
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
       const state = navigation.extras.state as { usuarioCorreo: string };
