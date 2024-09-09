@@ -16,14 +16,27 @@ export class LoginPage implements OnInit {
   ngOnInit() {
 
   }
-  validarCredenciales(){
+  validarCredenciales() {
+    if (this.usuarioCorreo.length > 25) {
+      console.log('El correo del usuario no debe exceder los 25 caracteres.');
+      return;
+    }
 
-    this.router.navigate(['/inicio'],{
-      state: {
-        correo: this.usuarioCorreo,
-        contrasena: this.usuarioContrasena
-      }
-    });
+    const contrasenaValida = this.validarContrasena(this.usuarioContrasena);
+    if (!contrasenaValida) {
+      console.log('La contraseña debe tener al menos 12 caracteres e incluir un carácter especial.');
+      return;
+    }
+
+    // Si las credenciales son válidas, redirigir a la página de inicio
+    console.log('Credenciales válidas, redirigiendo a inicio...');
+    this.router.navigate(['/inicio']);  // Redirigir a la página de inicio
+  }
+
+  validarContrasena(contrasena: string): boolean {
+    // Al menos 12 caracteres y al menos un carácter especial
+    const regex = /^(?=.*[!@#$%^&*()_+{}[\]:;<>,.?/~`-]).{12,}$/;
+    return regex.test(contrasena);
   }
 
   

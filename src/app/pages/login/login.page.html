@@ -1,27 +1,40 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title class="ion-text-center">Skeleton-APP</ion-title>
+    <ion-title class="ion-text-center">DUDU</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-img src="assets/images/login.svg"></ion-img>
+  <ion-img src="assets/du-Photoroom.png"></ion-img>
 
-  <ion-item class="ion-margin-top">
-    <ion-input labelPlacement="floating" [(ngModel)]="usuarioCorreo">
-      <div slot="label">Usuario</div>
+  <ion-text class="ion-text-center">
+    <h2 class="titulo-sesion">Iniciar Sesión</h2>
+  </ion-text>
+
+  <ion-item class="ion-margin-top custom-item">
+    <ion-input
+      label="Usuario"
+      label-placement="floating"
+      fill="outline"
+      maxlength="25"
+      placeholder="Ingresa tu usuario"
+      [(ngModel)]="usuarioCorreo">
     </ion-input>
   </ion-item>
 
-  <ion-item class="ion-margin-top">
-    <ion-input labelPlacement="floating" type="password" [(ngModel)]="usuarioContrasena">
-      <div slot="label">Contrasena</div>
+  <ion-item class="ion-margin-top custom-item">
+    <ion-input
+      labelPlacement="floating"
+      type="password"
+      fill="outline"
+      [(ngModel)]="usuarioContrasena">
+      <div slot="label">Contraseña</div>
     </ion-input>
   </ion-item>
 
   <ion-button class="ion-margin-top" expand="block" (click)="validarCredenciales()">Ingresar</ion-button>
 
   <ion-text class="ion-text-center" [routerLink]="['/recuperar']">
-    <p>¿Olvidaste tu contrasena?</p>
+    <p>¿Olvidaste tu contraseña?</p>
   </ion-text>
 </ion-content>
