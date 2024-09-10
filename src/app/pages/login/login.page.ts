@@ -18,9 +18,15 @@ export class LoginPage implements OnInit {
   }
   validarCredenciales() {
     if (this.usuarioCorreo.length > 25) {
-      console.log('El correo del usuario no debe exceder los 25 caracteres.');
+      console.log('El usuario no debe exceder los 25 caracteres.');
       return;
     }
+
+    const regex = /^[a-zA-Z]+$/;
+  if (!regex.test(this.usuarioCorreo)) {
+    console.log('El usuario solo debe contener letras.');
+    return;
+  }
   
     const contrasenaValida = this.validarContrasena(this.usuarioContrasena);
     if (!contrasenaValida) {

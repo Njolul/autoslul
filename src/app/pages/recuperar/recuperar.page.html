@@ -4,10 +4,28 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">recuperar</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <ion-img src="assets/du-Photoroom.png"></ion-img>
+
+  <ion-text class="ion-text-center">
+    <h2 class="titulo-sesion">Recuperar Contraseña</h2>
+  </ion-text>
+  
+  <ion-item class="ion-margin-top custom-item">
+    <ion-input
+      label="Correo Electrónico"
+      label-placement="floating"
+      fill="outline"
+      maxlength="50"
+      placeholder="Ingresa tu correo electrónico"
+      type="email"
+      [(ngModel)]="Correo">
+    </ion-input>
+  </ion-item>
+
+  <ion-text color="danger" *ngIf="correoInvalido">
+    <p>Por favor, ingresa un correo electrónico válido.</p>
+  </ion-text>
+
+  <ion-button class="ion-margin-top" expand="block" (click)="validarCredenciales()">Recuperar</ion-button>
 </ion-content>
