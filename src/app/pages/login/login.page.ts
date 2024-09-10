@@ -10,6 +10,8 @@ export class LoginPage implements OnInit {
 
   usuarioCorreo: string = "";
   usuarioContrasena: string = "";
+  usuarioInvalido: boolean = false;
+  contrasenaInvalida: boolean = false;
 
   constructor(private router: Router) { }
 
@@ -17,33 +19,32 @@ export class LoginPage implements OnInit {
 
   }
   validarCredenciales() {
-    if (this.usuarioCorreo.length > 25) {
-      console.log('El usuario no debe exceder los 25 caracteres.');
-      return;
-    }
-
-    const regex = /^[a-zA-Z]+$/;
-  if (!regex.test(this.usuarioCorreo)) {
-    console.log('El usuario solo debe contener letras.');
-    return;
+    const regexUsuario = /^[a-zA-Z]+$/;
+  if (this.usuarioCorreo.length > 25 || !regexUsuario.test(this.usuarioCorreo)) {
+    this.usuarioInvalido = true;
+  } else {
+    this.usuarioInvalido = false;
   }
+
   
-    const contrasenaValida = this.validarContrasena(this.usuarioContrasena);
-    if (!contrasenaValida) {
-      console.log('La contraseña debe tener al menos 12 caracteres e incluir un carácter especial.');
-      return;
-    }
+  const contrasenaValida = this.validarContrasena(this.usuarioContrasena);
+  if (!contrasenaValida) {
+    this.contrasenaInvalida = true;
+  } else {
+    this.contrasenaInvalida = false;
+  }
+
   
-    
+  if (!this.usuarioInvalido && !this.contrasenaInvalida) {
     console.log('Credenciales válidas, redirigiendo a inicio...');
     this.router.navigate(['/inicio'], { state: { usuarioCorreo: this.usuarioCorreo } });
   }
-  
-  validarContrasena(contrasena: string): boolean {
-    
-    const regex = /^(?=.*[!@#$%^&*()_+{}[\]:;<>,.?/~`-]).{12,}$/;
-    return regex.test(contrasena);
-  }
+}
+
+validarContrasena(contrasena: string): boolean {
+  const regex = /^(?=.*[!@#$%^&*()_+{}[\]:;<>,.?/~`-]).{12,}$/;
+  return regex.test(contrasena);
+}
 
   
 }

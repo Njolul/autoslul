@@ -21,16 +21,18 @@
       [(ngModel)]="usuarioCorreo">
     </ion-input>
   </ion-item>
-
+  <ion-text *ngIf="usuarioInvalido" color="danger">Usuario inválido</ion-text>
+  
   <ion-item class="ion-margin-top custom-item">
     <ion-input
-      labelPlacement="floating"
+      label="Contraseña"
+      label-placement="floating"
       type="password"
-      fill="outline"
+      placeholder="Ingresa tu contraseña"
       [(ngModel)]="usuarioContrasena">
-      <div slot="label">Contraseña</div>
     </ion-input>
   </ion-item>
+  <ion-text *ngIf="contrasenaInvalida" color="danger">Contraseña inválida</ion-text>
 
   <ion-button class="ion-margin-top" expand="block" (click)="validarCredenciales()">Ingresar</ion-button>
 
