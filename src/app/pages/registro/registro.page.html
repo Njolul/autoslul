@@ -1,0 +1,74 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">DUDU</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-img src="assets/du-Photoroom.png"></ion-img>
+
+  <ion-text class="ion-text-center">
+    <h2 class="titulo-sesion">Registrarse</h2>
+  </ion-text>
+
+  <!-- Campo para Nombre Completo -->
+  <ion-item class="ion-margin-top custom-item">
+    <ion-input
+      label="Nombre Completo"
+      label-placement="floating"
+      fill="outline"
+      maxlength="50"
+      placeholder="Ingresa tu nombre completo"
+      [(ngModel)]="nombreCompleto">
+    </ion-input>
+  </ion-item>
+  <ion-text *ngIf="nombreInvalido" color="danger">Nombre inválido</ion-text>
+
+  <!-- Campo para Correo Electrónico -->
+  <ion-item class="ion-margin-top custom-item">
+    <ion-input
+      label="Correo Electrónico"
+      label-placement="floating"
+      fill="outline"
+      maxlength="50"
+      type="email"
+      placeholder="Ingresa tu correo electrónico"
+      [(ngModel)]="usuarioCorreo">
+    </ion-input>
+  </ion-item>
+  <ion-text *ngIf="correoInvalido" color="danger">Correo inválido</ion-text>
+
+  <!-- Campo para Contraseña -->
+  <ion-item class="ion-margin-top custom-item">
+    <ion-input
+      label="Contraseña"
+      label-placement="floating"
+      type="password"
+      fill="outline"
+      placeholder="Ingresa tu contraseña"
+      [(ngModel)]="usuarioContrasena">
+    </ion-input>
+  </ion-item>
+  <ion-text *ngIf="contrasenaInvalida" color="danger">Contraseña inválida</ion-text>
+
+  <!-- Campo para Confirmar Contraseña -->
+  <ion-item class="ion-margin-top custom-item">
+    <ion-input
+      label="Confirmar Contraseña"
+      label-placement="floating"
+      type="password"
+      fill="outline"
+      placeholder="Confirma tu contraseña"
+      [(ngModel)]="confirmarContrasena">
+    </ion-input>
+  </ion-item>
+  <ion-text *ngIf="confirmacionInvalida" color="danger">Las contraseñas no coinciden</ion-text>
+
+  <!-- Botón para registrarse -->
+  <ion-button class="ion-margin-top" expand="block" (click)="registrarUsuario()">Registrarse</ion-button>
+
+  <!-- Enlace para ir al inicio de sesión -->
+  <ion-text class="ion-text-center" [routerLink]="['/login']">
+    <p>¿Ya tienes una cuenta? Inicia sesión</p>
+  </ion-text>
+</ion-content>

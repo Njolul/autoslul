@@ -11,6 +11,7 @@
     <h2 class="titulo-sesion">Iniciar Sesión</h2>
   </ion-text>
 
+
   <ion-item class="ion-margin-top custom-item">
     <ion-input
       label="Usuario"
@@ -23,6 +24,7 @@
   </ion-item>
   <ion-text *ngIf="usuarioInvalido" color="danger">Usuario inválido</ion-text>
   
+
   <ion-item class="ion-margin-top custom-item">
     <ion-input
       label="Contraseña"
@@ -34,9 +36,17 @@
   </ion-item>
   <ion-text *ngIf="contrasenaInvalida" color="danger">Contraseña inválida</ion-text>
 
+
   <ion-button class="ion-margin-top" expand="block" (click)="validarCredenciales()">Ingresar</ion-button>
 
+  
   <ion-text class="ion-text-center" [routerLink]="['/recuperar']">
     <p>¿Olvidaste tu contraseña?</p>
   </ion-text>
+
+
+  <ion-text class="ion-text-center" [routerLink]="['/registro']">
+    <p>¿No tienes cuenta? Regístrate</p>
+  </ion-text>
+
 </ion-content>
