@@ -1,50 +1,48 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';  
+import { DbService } from 'src/app/servicio/database.service'; // Importa el servicio de la base de datos
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
+  usuarioCorreo: string = '';  
+  usuarioContrasena: string = '';  
+  usuarioInvalido: boolean = false;  
+  contrasenaInvalida: boolean = false;  
 
-  usuarioCorreo: string = "";
-  usuarioContrasena: string = "";
-  usuarioInvalido: boolean = false;
-  contrasenaInvalida: boolean = false;
+  constructor(private dbService: DbService, private router: Router) {}
 
-  constructor(private router: Router) { }
-
-  ngOnInit() {
-
-  }
-  validarCredenciales() {
-    const regexUsuario = /^[a-zA-Z]+$/;
-  if (this.usuarioCorreo.length > 25 || !regexUsuario.test(this.usuarioCorreo)) {
-    this.usuarioInvalido = true;
-  } else {
-    this.usuarioInvalido = false;
+  async ngOnInit() {
+    try {
+      await this.dbService.initDB(); // Inicializar la base de datos
+    } catch (error) {
+      console.error("Error al inicializar la base de datos", error);
+    }
   }
 
-  
-  const contrasenaValida = this.validarContrasena(this.usuarioContrasena);
-  if (!contrasenaValida) {
-    this.contrasenaInvalida = true;
-  } else {
-    this.contrasenaInvalida = false;
+  async validarCredenciales() {
+    // Obtener el usuario desde la base de datos por su correo
+    const usuario = await this.dbService.getUser(this.usuarioCorreo);
+
+    if (usuario && usuario.correo === this.usuarioCorreo && usuario.contrasena === this.usuarioContrasena) {
+      // Si las credenciales coinciden, redirigir al inicio
+      alert('Inicio de sesión exitoso');
+      this.router.navigate(['/inicio']);  
+    } else {
+      // Verificar cuál es el error (correo o contraseña incorrectos)
+      if (!usuario) {
+        this.usuarioInvalido = true; 
+      } else {
+        this.usuarioInvalido = false; 
+      }
+      if (usuario && usuario.contrasena !== this.usuarioContrasena) {
+        this.contrasenaInvalida = true; 
+      } else {
+        this.contrasenaInvalida = false; 
+      }
+    }
   }
-
-  
-  if (!this.usuarioInvalido && !this.contrasenaInvalida) {
-    console.log('Credenciales válidas, redirigiendo a inicio...');
-    this.router.navigate(['/inicio'], { state: { usuarioCorreo: this.usuarioCorreo } });
-  }
-}
-
-validarContrasena(contrasena: string): boolean {
-  const regex = /^(?=.*[!@#$%^&*()_+{}[\]:;<>,.?/~`-]).{12,}$/;
-  return regex.test(contrasena);
-}
-
-  
 }
