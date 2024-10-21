@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  
   {
     path: '',
     redirectTo: 'login',
@@ -10,23 +9,29 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
   },
   {
     path: 'inicio',
-    loadChildren: () => import('./pages/inicio/inicio.module').then( m => m.InicioPageModule)
+    loadChildren: () => import('./pages/inicio/inicio.module').then(m => m.InicioPageModule)
   },
   {
     path: 'recuperar',
-    loadChildren: () => import('./pages/recuperar/recuperar.module').then( m => m.RecuperarPageModule)
+    loadChildren: () => import('./pages/recuperar/recuperar.module').then(m => m.RecuperarPageModule)
   },
- 
   {
     path: 'registro',
-    loadChildren: () => import('./pages/registro/registro.module').then( m => m.RegistroPageModule)
+    loadChildren: () => import('./pages/registro/registro.module').then(m => m.RegistroPageModule)
+  },
+  {
+    path: 'error404',
+    loadChildren: () => import('./pages/error404/error404.module').then(m => m.Error404PageModule)
   },
   
-  
+  {
+    path: '**',
+    redirectTo: 'error404'
+  }
 ];
 
 @NgModule({
@@ -35,4 +40,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
