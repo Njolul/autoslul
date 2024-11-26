@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { Router } from '@angular/router';
-import { DbService } from 'src/app/servicio/database.service'; // Importar el servicio de la base de datos
+import { SupabaseService } from 'src/app/pages/supabase.service'; // Importar el servicio de Supabase
 
 @Component({
   selector: 'app-registro',
@@ -18,12 +18,12 @@ export class RegistroPage {
   correoInvalido: boolean = false;
   contrasenaInvalida: boolean = false;
   confirmacionInvalida: boolean = false;
-  usuarioExistente: boolean = false; // Agregado para verificar si el usuario ya existe
+  usuarioExistente: boolean = false; // Verificar si el usuario ya existe
 
   constructor(
     private storage: Storage,
     private router: Router,
-    private dbService: DbService // Inyectar el servicio de base de datos
+    private supabaseService: SupabaseService // Inyectar el servicio de Supabase
   ) {}
 
   async ngOnInit() {
@@ -31,61 +31,93 @@ export class RegistroPage {
     await this.storage.create();
   }
 
+  /**
+   * Registrar un nuevo usuario.
+   */
   async registrarUsuario() {
-    // Validar campos
+    // Validar los campos del formulario
     this.validarCampos();
 
-    // Verificar si el correo ya existe en el almacenamiento
-    const usuarioExistente = await this.storage.get(this.usuarioCorreo);
+    if (
+      this.nombreInvalido ||
+      this.correoInvalido ||
+      this.contrasenaInvalida ||
+      this.confirmacionInvalida
+    ) {
+      alert('Por favor, corrige los errores en el formulario.');
+      return;
+    }
+
+    // Verificar si el correo ya existe en Supabase
+    const usuarioExistente = await this.supabaseService.getUser(
+      this.usuarioCorreo
+    );
 
     if (usuarioExistente) {
       this.usuarioExistente = true;
       alert('Ya existe un usuario con este correo electrónico.');
-      return; // Salir si el usuario ya existe
+      return;
     } else {
-      this.usuarioExistente = false; // Asegurarse de que se reinicie el estado
+      this.usuarioExistente = false; // Reiniciar estado si no existe el usuario
     }
 
-    if (!this.nombreInvalido && !this.correoInvalido && !this.contrasenaInvalida && !this.confirmacionInvalida && !this.usuarioExistente) {
-      // Almacenar el usuario en el almacenamiento
-      const usuario = {
-        nombre: this.nombreCompleto,
-        correo: this.usuarioCorreo,
-        contrasena: this.usuarioContrasena
-      };
+    // Si todos los campos son válidos, proceder con el registro
+    const usuario = {
+      nombre: this.nombreCompleto,
+      correo: this.usuarioCorreo,
+      contrasena: this.usuarioContrasena,
+    };
 
-      // Guardar en el Storage
-      await this.storage.set(this.usuarioCorreo, usuario);
+    // Guardar en Supabase
+    const respuesta = await this.supabaseService.addUser(
+      usuario.nombre,
+      usuario.correo,
+      usuario.contrasena
+    );
 
-      // Guardar en la base de datos SQLite
-      await this.dbService.addUser(usuario.nombre, usuario.correo, usuario.contrasena);
-
+    if (respuesta) {
       alert('Registro exitoso. Puedes iniciar sesión ahora.');
       this.router.navigate(['/login']); // Redirigir a la página de inicio de sesión
+    } else {
+      alert('Ocurrió un error al registrar el usuario en la base de datos.');
     }
   }
 
+  /**
+   * Valida los campos del formulario.
+   */
   validarCampos() {
     this.nombreInvalido = this.nombreCompleto.trim() === '';
     this.correoInvalido = !this.validarEmail(this.usuarioCorreo);
     this.contrasenaInvalida = this.usuarioContrasena.trim() === '';
-    this.confirmacionInvalida = this.confirmarContrasena !== this.usuarioContrasena;
+    this.confirmacionInvalida =
+      this.confirmarContrasena !== this.usuarioContrasena;
   }
 
+  /**
+   * Valida el formato del correo electrónico.
+   * @param email Correo a validar
+   * @returns `true` si el correo es válido, `false` en caso contrario.
+   */
   validarEmail(email: string): boolean {
-    // Expresión regular para validar el formato del correo electrónico
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   }
 
-  // Este método se puede usar para migrar todos los usuarios del Storage a la base de datos SQLite
+  /**
+   * Método para migrar usuarios existentes en el almacenamiento local a Supabase.
+   */
   async migrarUsuariosAStorage() {
     const keys = await this.storage.keys(); // Obtener todas las llaves (correos)
     for (let key of keys) {
       const usuario = await this.storage.get(key); // Obtener cada usuario del Storage
       if (usuario) {
-        // Guardar cada usuario en la base de datos SQLite
-        await this.dbService.addUser(usuario.nombre, usuario.correo, usuario.contrasena);
+        // Guardar cada usuario en Supabase
+        await this.supabaseService.addUser(
+          usuario.nombre,
+          usuario.correo,
+          usuario.contrasena
+        );
       }
     }
   }
