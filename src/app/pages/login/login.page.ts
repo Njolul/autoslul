@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';  
-import { DbService } from 'src/app/servicio/database.service'; // Importa el servicio de la base de datos
+import { Router } from '@angular/router';
+import { SupabaseService } from 'src/app/pages/supabase.service'; // Importar el servicio de Supabase
 
 @Component({
   selector: 'app-login',
@@ -8,41 +8,36 @@ import { DbService } from 'src/app/servicio/database.service'; // Importa el ser
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
-  usuarioCorreo: string = '';  
-  usuarioContrasena: string = '';  
-  usuarioInvalido: boolean = false;  
-  contrasenaInvalida: boolean = false;  
+  usuarioCorreo: string = ''; // Correo del usuario ingresado
+  usuarioContrasena: string = ''; // Contraseña ingresada
+  usuarioInvalido: boolean = false; // Indica si el usuario es inválido
+  contrasenaInvalida: boolean = false; // Indica si la contraseña es inválida
 
-  constructor(private dbService: DbService, private router: Router) {}
+  constructor(
+    private supabaseService: SupabaseService, // Inyección del servicio de Supabase
+    private router: Router // Inyección del router para redirigir
+  ) {}
 
-  async ngOnInit() {
-    try {
-      await this.dbService.initDB(); // Inicializar la base de datos
-    } catch (error) {
-      console.error("Error al inicializar la base de datos", error);
-    }
-  }
-
+  /**
+   * Valida las credenciales ingresadas por el usuario.
+   */
   async validarCredenciales() {
-    // Obtener el usuario desde la base de datos por su correo
-    const usuario = await this.dbService.getUser(this.usuarioCorreo);
+    try {
+      // Consultar el usuario en la base de datos de Supabase por su correo
+      const usuario = await this.supabaseService.getUser(this.usuarioCorreo);
 
-    if (usuario && usuario.correo === this.usuarioCorreo && usuario.contrasena === this.usuarioContrasena) {
-      // Si las credenciales coinciden, redirigir al inicio
-      alert('Inicio de sesión exitoso');
-      this.router.navigate(['/inicio']);  
-    } else {
-      // Verificar cuál es el error (correo o contraseña incorrectos)
-      if (!usuario) {
-        this.usuarioInvalido = true; 
+      // Si el usuario existe y la contraseña coincide
+      if (usuario && usuario.contrasena === this.usuarioContrasena) {
+        alert('Inicio de sesión exitoso');
+        this.router.navigate(['/inicio']); // Redirigir a la página de inicio
       } else {
-        this.usuarioInvalido = false; 
+        // Manejar errores específicos: usuario o contraseña incorrectos
+        this.usuarioInvalido = !usuario;
+        this.contrasenaInvalida = usuario && usuario.contrasena !== this.usuarioContrasena;
       }
-      if (usuario && usuario.contrasena !== this.usuarioContrasena) {
-        this.contrasenaInvalida = true; 
-      } else {
-        this.contrasenaInvalida = false; 
-      }
+    } catch (error) {
+      console.error('Error al validar credenciales:', error);
+      alert('Ocurrió un error al intentar iniciar sesión. Intenta nuevamente.');
     }
   }
 }
