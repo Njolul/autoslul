@@ -22,7 +22,7 @@ export class InicioPage implements OnInit {
   constructor(
     private router: Router,
     private alertController: AlertController,
-    private googleMapsService: GoogleMapsService // Inyecta el servicio
+    private googleMapsService: GoogleMapsService
   ) {}
 
   async ngOnInit() {
@@ -34,7 +34,7 @@ export class InicioPage implements OnInit {
 
     // Cargar ubicación actual en el mapa
     try {
-      await this.googleMapsService.loadGoogleMapsAPI(); // Llama al servicio
+      await this.googleMapsService.loadGoogleMapsAPI(); 
       await this.cargarMapa();
     } catch (error) {
       console.error('Error al cargar Google Maps:', error);

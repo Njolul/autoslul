@@ -20,12 +20,12 @@ export class RecuperarPage {
   ) {}
 
   async ngOnInit() {
-    // Inicializar el almacenamiento
+    
     await this.storage.create();
   }
 
   async validarCredenciales() {
-    // Validar el formato del correo electrónico
+    
     this.correoInvalido = !this.validarEmail(this.Correo);
     if (this.correoInvalido) {
       alert('Por favor, ingresa un correo electrónico válido.');
@@ -33,27 +33,27 @@ export class RecuperarPage {
     }
 
     try {
-      // Consultar al usuario en Supabase por su correo
+      
       const usuario = await this.supabaseService.getUser(this.Correo);
 
       if (usuario) {
-        // Si el usuario existe, solicitar nueva contraseña
+        
         this.nuevaContrasena = prompt('Por favor, ingresa tu nueva contraseña:');
         if (this.nuevaContrasena) {
-          // Actualizar el usuario en Storage
+          
           const usuarioStorage = await this.storage.get(this.Correo);
           if (usuarioStorage) {
             usuarioStorage.contrasena = this.nuevaContrasena;
-            await this.storage.set(this.Correo, usuarioStorage); // Actualizar en Storage
+            await this.storage.set(this.Correo, usuarioStorage); 
           } else {
-            // Si no existe en Storage, crearlo
+            
             await this.storage.set(this.Correo, {
               correo: this.Correo,
               contrasena: this.nuevaContrasena,
             });
           }
 
-          // Actualizar en Supabase
+          
           const resultado = await this.supabaseService.updateUser(
             this.Correo,
             this.nuevaContrasena
@@ -61,7 +61,7 @@ export class RecuperarPage {
 
           if (resultado) {
             alert('Contraseña actualizada exitosamente. Puedes iniciar sesión ahora.');
-            this.router.navigate(['/login']); // Redirigir al inicio de sesión
+            this.router.navigate(['/login']); 
           } else {
             alert('Ocurrió un error al actualizar la contraseña en la base de datos.');
           }
@@ -78,7 +78,7 @@ export class RecuperarPage {
   }
 
   validarEmail(email: string): boolean {
-    // Expresión regular para validar el formato del correo electrónico
+    
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   }
