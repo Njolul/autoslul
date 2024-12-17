@@ -1,36 +1,35 @@
 .custom-item {
-    --border-radius: 12px;  
-    --ion-color-base: #a3a3a3; 
-    --placeholder-color: #a3a3a3; 
-    --background: rgb(62, 62, 62); 
-  }
-  
-  .custom-item ion-input {
-    --background: rgb(62, 62, 62);  
-    --color: #ffffff;               
-    --placeholder-color: #a3a3a3;   
-  }
-  
-  .custom-item .native-input {
-    border: 1px solid #a3a3a3;      
-    border-radius: 12px;           
-    padding: 10px;                  
-  }
+  --border-radius: 12px;  
+  --ion-color-base: #a3a3a3; 
+  --placeholder-color: #a3a3a3; 
+  --background: rgb(62, 62, 62); 
+}
 
-  .titulo-sesion {
-    text-align: center;    
-    font-size: 24px;       
-    font-weight: bold;     
-    margin-top: 5px;      
-    color: #ffffff;        
-  }
-  
-  ion-button {
-    width: 50%;              
-    margin: 20px auto 0 auto;          
-    display: block;  
-    --background: #306094; 
-    --border-radius: 12px; 
-    --color: #ffffff;      
-  }
-  
+.custom-item ion-input {
+  --background: rgb(62, 62, 62);  
+  --color: #ffffff;               
+  --placeholder-color: #a3a3a3;   
+}
+
+.custom-item .native-input {
+  border: 1px solid #a3a3a3;      
+  border-radius: 12px;           
+  padding: 10px;                  
+}
+
+.titulo-sesion {
+  text-align: center;    
+  font-size: 24px;       
+  font-weight: bold;     
+  margin-top: 5px;      
+  color: #ffffff;        
+}
+
+ion-button {
+  width: 50%;              
+  margin: 20px auto 0 auto;          
+  display: block;  
+  --background: #306094; 
+  --border-radius: 12px; 
+  --color: #ffffff;      
+}

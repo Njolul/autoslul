@@ -34,11 +34,28 @@ export class InicioPage implements OnInit {
 
     // Cargar ubicación actual en el mapa
     try {
-      await this.googleMapsService.loadGoogleMapsAPI(); 
-      await this.cargarMapa();
+      await this.googleMapsService.loadGoogleMapsAPI();
+      await this.solicitarPermisosYcargarMapa();
     } catch (error) {
       console.error('Error al cargar Google Maps:', error);
       this.mostrarError('No se pudo cargar Google Maps. Por favor, intenta nuevamente.');
+    }
+  }
+
+  async solicitarPermisosYcargarMapa() {
+    try {
+      // Solicitar permisos de ubicación
+      const permission = await Geolocation.requestPermissions();
+      if (permission.location !== 'granted') {
+        this.mostrarError('Permiso de ubicación no concedido');
+        return;
+      }
+
+      // Si los permisos son otorgados, obtenemos la ubicación y mostramos el mapa
+      await this.cargarMapa();
+    } catch (error) {
+      console.error('Error al solicitar permisos de ubicación:', error);
+      this.mostrarError('Hubo un problema al solicitar los permisos de ubicación.');
     }
   }
 
